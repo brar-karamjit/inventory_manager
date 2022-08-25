@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title%}
+Products
+{% endblock title%}
+
+{% block body%}
+<div class="container my-3">
+    <h2>List of Products and quantity in store</h2>
+    <table class="table my-5">
+        <thead>
+          <tr>
+            
+            <th scope="col">Name</th>
+            <th scope="col">Quantity</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for candy in candyyy %}
+          <tr>
+            
+            <td>{{candy.name}}</td>
+            <td>{{candy.quantity}}</td>
+           
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+        <tbody>
+          
+          <tr>
+            
+            <td>Total quantity in store</td>
+            <td>{{tot}}</td>
+           
+          </tr>
+          
+          
+        </tbody>
+       
+      </table>
+</div>
+
+{% endblock body%}
