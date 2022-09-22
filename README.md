@@ -20,7 +20,7 @@ browser
 Once on home page enter the quanity you want to buy, click buy and it will take you to a purchase confirmation page
 and update the quantity in store database.
 
-### Purchasing
+### Inventory
 In the navbar section you can click "Products" to view the inventory.
 
 ### Add new item
