@@ -8,7 +8,7 @@ Home
 {% block body%}
 <div class="container my-5">
     
-    <h2>Welcome to the candy Shop (v1)</h2>
+    <h2>Tooling Inventory Manager</h2>
     
 </div>
 
@@ -29,7 +29,7 @@ Home
                       {% csrf_token %}
                       Enter quantity  <input  type="number" value="0" name="val">
                       <input type="hidden" value="{{candy.name}}" name="cname">
-                      <input class="btn btn-outline-dark my-2" type="Submit" value="Buy" >
+                      <input class="btn btn-outline-dark my-2" type="Submit" value="Update" >
                       </div>
                       <small class="text-muted">{{candy.quantity}} in stock</small>
                     </form>
@@ -58,15 +58,15 @@ Home
 </div>
 
 <div style="background-image: url(); " class="container" > 
-  <h2> Want more candies? who doesn't ?</h2>
+  <h2> Missing a Tool?</h2>
   <br>
-  <h3> Let's add a new candy to our store.</h3>
+  <h3> Let's add a new one to our Inventory.</h3>
 
   <form action="/add" method="post">
     {% csrf_token %}
     <div style="width: 300px" class="container my-5">
     <div class="form-group">
-    <label for="exampleFormControlInput1">Candy Name</label>
+    <label for="exampleFormControlInput1">Tool Name</label>
     <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ex - Jolly Rancher" name="cname">
     
     <label for="exampleFormControlInput2">Quantity to add</label>
@@ -92,19 +92,19 @@ Home
 
 
     <div class="col-sm">
-      <div style="border: 3px dotted rgb(207, 140, 140); background-image: url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1140&q=80'); " class="container">
-        <h3 style="margin-top: 5ex">Take the whole box home</h3>
-        <h5>  Dw, we wont judge</h5>
+      <div style="background-image: url('https://www.advancedtech.com/wp-content/uploads/2022/04/iStock-659160968-scaled.jpg'); " class="container">
+        <h3 style="margin-top: 5ex">Remove an Item</h3>
+        <h5>Please notify the Manager</h5>
         <div class="container my-4" style="width: 400px;">
           <form action="/delete" method="post">
             {% csrf_token %}
             <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="cname">
-              <option selected>Choose candy</option>
+              <option selected>Choose Tool</option>
               {% for candy in candyyy %}
               <option value="{{candy.name}}" name="cname">{{candy.name}}</option>
               {% endfor %}
             </select>
-            <input class="btn btn-outline-dark my-2" type="Submit" value="Take it home" >
+            <input class="btn btn-outline-dark my-2" type="Submit" value="Checkout" >
           </form>
         </div>
         <br>
@@ -123,7 +123,7 @@ Home
             <div class="row">
               <div class="col-md">
                 <select style="width: 180px;"  class="form-select form-select-lg my-3" aria-label=".form-select-lg example" name="cname1">
-                  <option selected>candy name</option>
+                  <option selected>Tool name</option>
                   {% for candy in candyyy %}
                   <option value="{{candy.name}}" name="cname">{{candy.name}}</option>
                   {% endfor %}
@@ -142,7 +142,7 @@ Home
             <div class="row">
               <div class="col-md">
                 <select style="width: 180px;"  class="form-select form-select-lg my-3" aria-label=".form-select-lg example" name="cname2">
-                  <option selected>candy name</option>
+                  <option selected>Tool name</option>
                   {% for candy in candyyy %}
                   <option value="{{candy.name}}" name="cname">{{candy.name}}</option>
                   {% endfor %}
@@ -163,7 +163,7 @@ Home
             <div class="row">
               <div class="col-md">
                 <select style="width: 180px;"  class="form-select form-select-lg my-3" aria-label=".form-select-lg example" name="cname3">
-                  <option selected>candy name</option>
+                  <option selected>Tool name</option>
                   {% for candy in candyyy %}
                   <option value="{{candy.name}}" name="cname">{{candy.name}}</option>
                   {% endfor %}
