@@ -34,7 +34,7 @@ ALLOWED_HOSTS = ['guarded-plains-11100.herokuapp.com', 'localhost', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    'home1.apps.Home1Config',
+    'mainApp.apps.mainAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

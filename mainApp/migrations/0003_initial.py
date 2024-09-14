@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('home1', '0002_delete_candy'),
+        ('mainApp', '0002_delete_candy'),
     ]
 
     operations = [

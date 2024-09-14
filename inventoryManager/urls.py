@@ -22,5 +22,5 @@ admin.site.index_title = "Welcome to the store"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('home1.urls'))
+    path('', include('mainApp.urls'))
 ]
