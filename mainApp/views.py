@@ -11,11 +11,11 @@ def index(request):
     candy_list = candy.objects.all()
     return render(request, 'index.html', 
     {'candyyy' : candy_list})
-    #return HttpResponse("Welcome to brar candystore")
+    #return HttpResponse("Welcome to Inventory Tool")
 
 def about(request):
     return render(request, 'about.html')
-    #return HttpResponse("A sample candystore project")
+    #return HttpResponse("A sample Inventory project")
 
 def products(request):
     candy_list = candy.objects.all()

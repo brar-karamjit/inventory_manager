@@ -1,1 +1,1 @@
-web: gunicorn candystore.wsgi
+web: gunicorn inventoryManger.wsgi

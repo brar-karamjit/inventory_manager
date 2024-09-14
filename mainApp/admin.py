@@ -1,5 +1,5 @@
 from django.contrib import admin
-from home1.models import candy
+from mainApp.models import candy
 
 admin.site.register(candy)
 
