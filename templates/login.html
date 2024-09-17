@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title%}
-Sign Up
+Login
 {% endblock title%}
 
 {% block body%}
@@ -9,9 +9,11 @@ Sign Up
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="btn btn-primary">Sign Up</button>
-    </form>
+      <button type="submit" class="btn btn-primary">Log In</button>
+      </form>
+      <br>
+      <p>New User?<p>
+      <a href="{% url 'signup' %}" class="btn btn-secondary">Sign up here</a>
         
-
 </div>
 {% endblock body%}

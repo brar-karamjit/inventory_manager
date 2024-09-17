@@ -4,19 +4,45 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render, HttpResponse
 from .models import candy
 from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import SignUpForm
 
 
-# Create your views here.
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('mainApp')
+    else:
+        form = SignUpForm()
+    return render(request, 'signup.html', {'form': form})
+
+class CustomLoginView(LoginView):
+    template_name = 'login.html'
+
+class CustomLogoutView(LogoutView):
+    next_page = '/login/'
+
+@login_required
 def index(request):
     candy_list = candy.objects.all()
     return render(request, 'index.html', 
     {'candyyy' : candy_list})
     #return HttpResponse("Welcome to Inventory Tool")
 
+@login_required
 def about(request):
     return render(request, 'about.html')
     #return HttpResponse("A sample Inventory project")
 
+@login_required
 def products(request):
     candy_list = candy.objects.all()
     tot = 0
@@ -27,15 +53,13 @@ def products(request):
     {'candyyy' : candy_list, 'tot' : tot})
     #return HttpResponse("List of products")
 
+@login_required
 def contact(request):
     return render(request, 'contact.html')
     #return HttpResponse("br.kramjit@gmail.com")
 
-def signup(request):
-    
-    return render(request, 'signup.html')
-    #return HttpResponse("br.kramjit@gmail.com")
 
+@login_required
 def sub(request):
     val1 = int(request.POST['val'])
     val2 = request.POST['cname']
@@ -52,7 +76,7 @@ def sub(request):
     return render(request, 'purchase.html',
     {'cname1' : val2, 'val': val1, 'tc' :tot})
     
-
+@login_required
 def add(request):
     qt = int(request.POST['val'])
     cname = request.POST['cname']
@@ -66,7 +90,7 @@ def add(request):
     return redirect('/')
     
 
-
+@login_required
 def delete(request):
     
     cname = request.POST['cname']
@@ -81,6 +105,7 @@ def delete(request):
     return render(request, 'purchase.html',
     {'cname1' : cname, 'val': val1, 'tc' :tot})
 
+@login_required
 def assort(request):
     cname1 = request.POST['cname1']
     cname2 = request.POST['cname2']
