@@ -1,4 +1,4 @@
-# Inventory Manager :shaved_ice:
+# Inventory Manager 
 
 Tech stack 
 Frontend - HTML, CSS
