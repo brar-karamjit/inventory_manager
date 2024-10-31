@@ -2,7 +2,7 @@ from ast import Return
 from contextlib import nullcontext
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, HttpResponse
-from .models import candy
+from .models import Product, Transaction
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
@@ -32,9 +32,9 @@ class CustomLogoutView(LogoutView):
 
 @login_required
 def index(request):
-    candy_list = candy.objects.all()
+    product_list = Product.objects.all()
     return render(request, 'index.html', 
-    {'candyyy' : candy_list})
+    {'products' : product_list})
     #return HttpResponse("Welcome to Inventory Tool")
 
 @login_required
