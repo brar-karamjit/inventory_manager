@@ -14,5 +14,6 @@ urlpatterns = [
     path('sub', views.sub, name='sub'),
     path('add', views.add, name='add'),
     path('delete', views.delete, name='delete'),
-    path('assort', views.assort, name='assort')
+    path('transactions', views.transaction_list, name='transaction_list'),
+
 ]

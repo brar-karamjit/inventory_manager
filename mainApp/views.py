@@ -4,12 +4,13 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render, HttpResponse
 from .models import Product, Transaction
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.models import User
 from .forms import SignUpForm
 
 
@@ -19,9 +20,13 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('mainApp')
+            messages.success(request, 'Account created successfully! Welcome!')
+            return redirect('mainApp')  # Change 'mainApp' to your actual redirect URL name
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = SignUpForm()
+    
     return render(request, 'signup.html', {'form': form})
 
 class CustomLoginView(LoginView):
@@ -44,13 +49,13 @@ def about(request):
 
 @login_required
 def products(request):
-    candy_list = candy.objects.all()
+    Product_list = Product.objects.all()
     tot = 0
-    for candyy in candy_list:
-        tot = tot + candyy.quantity
+    for Producty in Product_list:
+        tot = tot + Producty.quantity
     
     return render(request, 'products.html',
-    {'candyyy' : candy_list, 'tot' : tot})
+    {'Products' : Product_list, 'tot' : tot})
     #return HttpResponse("List of products")
 
 @login_required
@@ -61,17 +66,26 @@ def contact(request):
 
 @login_required
 def sub(request):
-    val1 = int(request.POST['val'])
-    val2 = request.POST['cname']
-    c1 = candy.objects.get(name = val2)
+    val1 = int(request.POST['val']) #quantity to reduce
+    val2 = request.POST['cname'] #name of product to reduce
+    c1 = Product.objects.get(name = val2)
     
     c1.quantity = c1.quantity - val1
     c1.save()
 
-    candy_list = candy.objects.all()
+    # Log the transaction
+    transaction = Transaction(
+        product=c1,
+        username=request.user.username,  # Automatically use the logged-in user's username
+        old_quantity=c1.quantity + val1,
+        new_quantity=c1.quantity
+    )
+    transaction.save()
+
+    Product_list = Product.objects.all()
     tot = 0
-    for candyy in candy_list:
-        tot = tot + candyy.quantity
+    for Producty in Product_list:
+        tot = tot + Producty.quantity
     
     return render(request, 'purchase.html',
     {'cname1' : val2, 'val': val1, 'tc' :tot})
@@ -81,10 +95,20 @@ def add(request):
     qt = int(request.POST['val'])
     cname = request.POST['cname']
     curl = request.POST['curl']
+
     
     if(qt > 0):
-        c = candy(name=cname, quantity=qt, img=curl)
+        c = Product(name=cname, quantity=qt, img=curl)
         c.save()
+
+        # Log the transaction
+        transaction = Transaction(
+            product=c,
+            username=request.user.username,  # Automatically use the logged-in user's username
+            old_quantity=0,
+            new_quantity=qt
+        )
+        transaction.save()
     
     
     return redirect('/')
@@ -94,44 +118,39 @@ def add(request):
 def delete(request):
     
     cname = request.POST['cname']
-    c1 = candy.objects.get(name = cname)
+    c1 = Product.objects.get(name = cname)
     val1 = c1.quantity
+    # Log the transaction
+    transaction = Transaction(
+        product=c1,
+        username=request.user.username,  # Automatically use the logged-in user's username
+        old_quantity=c1.quantity,
+        new_quantity=0
+    )
+    transaction.save()
+
     c1.delete()
-    candy_list = candy.objects.all()
+    Product_list = Product.objects.all()
     tot = 0
-    for candyy in candy_list:
-        tot = tot + candyy.quantity
+    for Producty in Product_list:
+        tot = tot + Producty.quantity
     
     return render(request, 'purchase.html',
     {'cname1' : cname, 'val': val1, 'tc' :tot})
 
 @login_required
-def assort(request):
-    cname1 = request.POST['cname1']
-    cname2 = request.POST['cname2']
-    cname3 = request.POST['cname3']
+def transaction_list(request):
+    product_id = request.GET.get('product_id')  # Get the product ID from query parameters
+    transactions = Transaction.objects.all()  # Get all transactions
+    selected_product = None  # Default to None
 
-    val1 = int(request.POST['val1'])
-    val2 = int(request.POST['val2'])
-    val3 = int(request.POST['val3'])
+    if product_id:
+        selected_product = get_object_or_404(Product, id=product_id)  # Get the selected product
+        transactions = transactions.filter(product__id=product_id)  # Filter by product ID
 
-    c1 = candy.objects.get(name = cname1)
-    c2 = candy.objects.get(name = cname2)
-    c3 = candy.objects.get(name = cname3)
-
-    c1.quantity = c1.quantity - val1
-    c2.quantity = c2.quantity - val2
-    c3.quantity = c3.quantity - val3
-
-    c1.save()
-    c2.save()
-    c3.save()
-    valt = val1 + val2 + val3
-
-    candy_list = candy.objects.all()
-    tot = 0
-    for candyy in candy_list:
-        tot = tot + candyy.quantity
-
-    return render(request, 'purchase.html',
-    {'cname1' : cname1 + ',', 'cname2': cname2 + ' and ', 'cname3': cname3, 'val': valt, 'tc':tot})
+    products = Product.objects.all()  # Get all products for the dropdown
+    return render(request, 'transactions.html', {
+        'transactions': transactions,
+        'products': products,
+        'selected_product': selected_product,
+    })

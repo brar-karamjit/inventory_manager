@@ -1,6 +1,8 @@
 from django.contrib import admin
-from mainApp.models import candy
+from mainApp.models import Product, Transaction
 
-admin.site.register(candy)
+admin.site.register(Product)
 
-# Register your models here.
+# Register the Transaction model
+admin.site.register(Transaction)
+
