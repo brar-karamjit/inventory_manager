@@ -58,11 +58,6 @@ def products(request):
     {'Products' : Product_list, 'tot' : tot})
     #return HttpResponse("List of products")
 
-@login_required
-def contact(request):
-    return render(request, 'contact.html')
-    #return HttpResponse("br.kramjit@gmail.com")
-
 
 @login_required
 def sub(request):
@@ -89,9 +84,35 @@ def sub(request):
     
     return render(request, 'purchase.html',
     {'cname1' : val2, 'val': val1, 'tc' :tot})
+
+@login_required
+def returnitem(request):
+    val1 = int(request.POST['val']) #quantity to reduce
+    val2 = request.POST['cname'] #name of product to reduce
+    c1 = Product.objects.get(name = val2)
+    
+    c1.quantity = c1.quantity + val1
+    c1.save()
+
+    # Log the transaction
+    transaction = Transaction(
+        product=c1,
+        username=request.user.username,  # Automatically use the logged-in user's username
+        old_quantity=c1.quantity - val1,
+        new_quantity=c1.quantity
+    )
+    transaction.save()
+
+    Product_list = Product.objects.all()
+    tot = 0
+    for Producty in Product_list:
+        tot = tot + Producty.quantity
+    
+    return render(request, 'purchase.html',
+    {'cname1' : val2, 'val': val1, 'tc' :tot})
     
 @login_required
-def add(request):
+def additem(request):
     qt = int(request.POST['val'])
     cname = request.POST['cname']
     curl = request.POST['curl']

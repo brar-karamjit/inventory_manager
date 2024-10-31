@@ -1,21 +1,19 @@
 {% extends 'base.html' %}
 
-
-{% block title%}
+{% block title %}
 Purchase
-{% endblock title%}
+{% endblock title %}
 
-{% block body%}
-    <div style="background-image: url(https://images.unsplash.com/photo-1633871676530-cec28b5199d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80); border-radius: 25px;" class="container my-4">
-        <div class="p-5 mb-4 rounded-3">
-            <div class="container-fluid py-5">
-              <h1 class="display-5 fw-bold">Checkout</h1>
-              <p class="col-md-8 fs-4">Purchase of {{cname1}} {{cname2}} {{cname3}} confirmed, quantity -> {{val}} <br> Enjoy rest of your day. To go back to homepage, click on button below</p>
-              <a class="btn btn-primary btn-lg" href="/" >Continue to Home</a>
-            </div>
-            <p class="col-md-8 fs-5" >Total remaining Tooling Units in store {{tc}}</p>
-            </div>
-
+{% block body %}
+<div class="container my-4" style="background-color: #f8f9fa; border-radius: 15px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+    <div class="p-5">
+        <h1 class="display-5 fw-bold text-center text-dark">Checkout</h1>
+        <p class="text-center text-muted fs-5">Purchase of <strong>{{ cname1 }}</strong>, <strong>{{ cname2 }}</strong>, <strong>{{ cname3 }}</strong> confirmed, quantity: <strong>{{ val }}</strong></p>
+        <p class="text-center text-muted fs-5 mb-4">Enjoy the rest of your day!</p>
+        <div class="text-center">
+            <a class="btn btn-secondary btn-lg" href="/">Continue to Home</a>
+        </div>
+        <p class="text-center text-secondary fs-6 mt-4">Total remaining Tooling Units in store: <strong>{{ tc }}</strong></p>
     </div>
-    
-{% endblock body%}
+</div>
+{% endblock body %}

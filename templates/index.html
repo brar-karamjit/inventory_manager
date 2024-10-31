@@ -1,120 +1,154 @@
 {% extends 'base.html' %}
 
-
-{% block title%}
+{% block title %}
 Home
-{% endblock title%}
+{% endblock title %}
 
-{% block body%}
-<div class="container my-5">
-    
-    <h2>Tooling Inventory Manager</h2>
-    
-</div>
+{% block body %}
 
-<div class="container my-5">
-    <div class="container">
-      <h2>Welcome, {{ user.username }}!</h2>
-      <p>You are logged in.</p>
-
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-          {% for product in products %}
-          <div class="col">
-            <div class="card shadow-sm">
-            <img  src="{{product.img}}" >
-              <div class="card-body">
-                <p class="card-text">{{product.name}}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <form action="/sub" method="post">
-                      <div class="form-group">
-                      {% csrf_token %}
-                      Enter quantity  <input  type="number" value="0" name="val">
-                      <input type="hidden" value="{{product.name}}" name="cname">
-                      <input class="btn btn-outline-dark my-2" type="Submit" value="Update" >
-                      </div>
-                      <small class="text-muted">{{product.quantity}} in stock</small>
-                    </form>
-
-                    
-                    
-                  </div>
-                 
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-          
-          
-
-          
-  
-          
-        </div>
-      </div>
-</div>
-
-<div class="container" style="padding-top: 0ex; padding-bottom: 5ex;">
-  <hr>
-</div>
-
-<div style="background-image: url(); " class="container" > 
-  <h2> Missing a Tool?</h2>
-  <br>
-  <h3> Let's add a new one to our Inventory.</h3>
-
-  <form action="/add" method="post">
-    {% csrf_token %}
-    <div style="width: 300px" class="container my-5">
-    <div class="form-group">
-    <label for="exampleFormControlInput1">Tool Name</label>
-    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ex - Jolly Rancher" name="cname">
-    
-    <label for="exampleFormControlInput2">Quantity to add</label>
-    <input type="number" class="form-control" id="exampleFormControlInput2" value="0" name="val">
-    
-    <label for="exampleFormControlInput3">Image url</label>
-    <input type="text" class="form-control" id="exampleFormControlInput3"  name="curl">
-    <input class="btn btn-outline-dark my-2" type="Submit" value="Add to list" >
-  </div>
-  </div>
-  </form>
-
-</div>
-
-<div class="container">
-  <hr>
-</div>
-
-
-<div class="container my-5" style="padding-top: 5ex;">
-  
-  <div class="row">
-
-
-    <div class="col-sm">
-      <div style="background-image: url('https://www.advancedtech.com/wp-content/uploads/2022/04/iStock-659160968-scaled.jpg'); " class="container">
-        <h3 style="margin-top: 5ex">Remove an Item</h3>
-        <h5>Please notify the Manager</h5>
-        <div class="container my-4" style="width: 400px;">
-          <form action="/delete" method="post">
-            {% csrf_token %}
-            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="cname">
-              <option selected>Choose Tool</option>
-              {% for product in products %}
-              <option value="{{product.name}}" name="cname">{{product.name}}</option>
-              {% endfor %}
-            </select>
-            <input class="btn btn-outline-dark my-2" type="Submit" value="Checkout" >
-          </form>
-        </div>
-        <br>
-        <br>
-      </div>
+<!-- Welcome Section -->
+<div class="container my-5 text-center">
+    <h2 class="mb-3">Tooling Inventory Manager</h2>
+    <div class="text-end">
+        <small class="text-muted">Logged in as: {{ user.username }}</small><br>
     </div>
+</div>
+
+<!-- Product Inventory Section -->
+<div class="container my-5">
+  <h3 class="mb-5 text-center">Available Products</h3>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      {% for product in products %}
+      <div class="col">
+          <div class="card shadow-sm product-card my-3">
+              {% if product.img %}
+                  <img src="{{ product.img }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+              {% else %}
+                  <div class="card-img-top d-flex justify-content-center align-items-center" style="height: 200px; background-color: #f8f9fa;">
+                      <span class="text-muted">No Image Available</span>
+                  </div>
+              {% endif %}
+              <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">{{ product.name }}</h5>
+                  <p class="card-text">{{ product.quantity }} in stock</p>
+
+                  <!-- Checkout Form -->
+                  <form action="/sub" method="post" class="d-flex align-items-center mb-2">
+                      {% csrf_token %}
+                      <input type="number" class="form-control me-2" value="0" name="val" placeholder="Qty" min="1" required>
+                      <input type="hidden" value="{{ product.name }}" name="cname">
+                      <button type="submit" class="btn btn-outline-dark">Checkout</button>
+                  </form>
+
+                  <!-- Restock Form -->
+                  <form action="/returnitem" method="post" class="d-flex align-items-center">
+                      {% csrf_token %}
+                      <input type="number" class="form-control me-2" value="0" name="val" placeholder="Restock" min="1" required>
+                      <input type="hidden" value="{{ product.name }}" name="cname">
+                      <button type="submit" class="btn btn-outline-success">Restock</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
   </div>
 </div>
 
-{% endblock body%}
 
+
+
+<style>
+  .product-card {
+      width: 100%; /* Ensures the card takes full width of the column */
+      transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effects */
+  }
+
+  .product-card:hover {
+      transform: scale(1.05); /* Slightly enlarge the card on hover */
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+  }
+
+  /* Optional: Set a fixed width for the columns */
+  .col {
+      max-width: 300px; /* Adjust as needed for consistent card width */
+      margin: auto; /* Center the cards within the column */
+  }
+</style>
+
+
+<div class="container my-5" style="padding: 30px;">
+  <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8 col-sm-10">
+          <!-- Add Tool Section -->
+          <div style="background-color: #f8f9fa; border: 1px solid #6c757d; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+              <h2 class="text-center text-dark mb-3">Missing a Tool?</h2>
+              <h3 class="text-center text-muted mb-4">Let's add a new one.</h3>
+              <form action="/additem" method="post">
+                  {% csrf_token %}
+                  <div class="my-4">
+                      <div class="form-group">
+                          <label for="exampleFormControlInput1" class="text-secondary">Tool Name</label>
+                          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ex - Cordless drill" name="cname" style="border: 1px solid #6c757d;">
+                          
+                          <label for="exampleFormControlInput2" class="text-secondary">Quantity to add</label>
+                          <input type="number" class="form-control" id="exampleFormControlInput2" value="0" name="val" style="border: 1px solid #6c757d;">
+                          
+                          <label for="exampleFormControlInput3" class="text-secondary">Image URL</label>
+                          <input type="text" class="form-control" id="exampleFormControlInput3" name="curl" style="border: 1px solid #6c757d;">
+                          
+                          <button class="btn btn-outline-secondary my-3" type="submit" style="width: 100%; transition: background-color 0.3s;">
+                              Add to list
+                          </button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+
+      <div class="col-lg-6 col-md-8 col-sm-10 mt-4">
+          <!-- Remove Tool Section -->
+          <div style="background-color: #f8f9fa; border: 1px solid #6c757d; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+              <h4 class="mb-3 text-dark">Remove an Item</h4>
+              <h5 class="text-muted mb-4">Please notify the Manager</h5>
+              <div>
+                  <form action="/delete" method="post">
+                      {% csrf_token %}
+                      <select class="form-select mb-3" aria-label=".form-select-lg example" name="cname" style="border: 1px solid #6c757d;">
+                          <option selected>Choose Tool</option>
+                          {% for product in products %}
+                          <option value="{{ product.name }}">{{ product.name }}</option>
+                          {% endfor %}
+                      </select>
+                      <button class="btn btn-outline-secondary my-3" type="submit" style="width: 100%; transition: background-color 0.3s;">
+                          Checkout
+                      </button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<style>
+  .btn-outline-secondary:hover {
+      background-color: #6c757d; /* Darker slate on hover */
+      color: white;
+  }
+
+  .form-control:focus {
+      border-color: #5a6268; /* Dark slate border on focus */
+      box-shadow: 0 0 5px rgba(90, 98, 104, 0.5); /* Soft dark slate glow */
+  }
+
+  /* Additional styles for smaller screens */
+  @media (max-width: 576px) {
+      .container {
+          padding-left: 10px;
+          padding-right: 10px;
+      }
+  }
+</style>
+
+
+
+{% endblock body %}

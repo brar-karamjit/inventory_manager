@@ -18,10 +18,10 @@ Transactions
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Filter</button>
+        <button type="submit" class="btn btn-secondary my-2">Filter</button>
     </form>
 
-    <div class="alert alert-info">
+    <div class="alert alert-light border border-light">
         {% if selected_product %}
             <h4>Logs for Product: {{ selected_product.name }}</h4>
         {% else %}
@@ -32,7 +32,7 @@ Transactions
     {% if transactions %}
         <div class="list-group">
             {% for transaction in transactions %}
-            <div class="list-group-item">
+            <div class="list-group-item border border-dark my-1">
                 <strong>Product:</strong> {{ transaction.product.name }}<br>
                 <strong>Username:</strong> {{ transaction.username }}<br>
                 <strong>Old Quantity:</strong> {{ transaction.old_quantity }}<br>
