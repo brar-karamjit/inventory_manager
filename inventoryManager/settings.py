@@ -58,6 +58,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/login/'
 
+APPEND_SLASH = True
+
 ROOT_URLCONF = 'inventoryManager.urls'
 
 TEMPLATES = [
