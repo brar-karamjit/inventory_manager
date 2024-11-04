@@ -176,7 +176,7 @@ def transaction_list(request):
         'selected_product': selected_product,
     })
 
-
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    return render(request, 'product_detail.html', {'product': product})
+    transactions = Transaction.objects.filter(product=product)  # Fetch related transactions
+    return render(request, 'product_detail.html', {'product': product, 'transactions': transactions})

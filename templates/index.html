@@ -14,43 +14,50 @@ Home
 
 <!-- Product Inventory Section -->
 <div class="container my-5">
-  <h3 class="mb-5 text-center">Available Products</h3>
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      {% for product in products %}
-      <div class="col">
-          <div class="card shadow-sm product-card my-3">
-              {% if product.img %}
-                  <img src="{{ product.img }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
-              {% else %}
-                  <div class="card-img-top d-flex justify-content-center align-items-center" style="height: 200px; background-color: #f8f9fa;">
-                      <span class="text-muted">No Image Available</span>
-                  </div>
-              {% endif %}
-              <div class="card-body d-flex flex-column">
-                  <h5 class="card-title">{{ product.name }}</h5>
-                  <p class="card-text">{{ product.quantity }} in stock</p>
+    <h3 class="mb-5 text-center text-dark">Available Products</h3>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card shadow-lg border-0 product-card my-3">
+                {% if product.img %}
+                    <img src="{{ product.img }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top d-flex justify-content-center align-items-center" style="height: 200px; background-color: #f8f9fa;">
+                        <span class="text-muted">No Image Available</span>
+                    </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-center">{{ product.name }}</h5>
+                    <p class="card-text text-center text-muted mb-4">{{ product.quantity }} in stock</p>
 
-                  <!-- Checkout Form -->
-                  <form action="/sub" method="post" class="d-flex align-items-center mb-2">
-                      {% csrf_token %}
-                      <input type="number" class="form-control me-2" value="0" name="val" placeholder="Qty" min="1" required>
-                      <input type="hidden" value="{{ product.name }}" name="cname">
-                      <button type="submit" class="btn btn-outline-dark">Checkout</button>
-                  </form>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Checkout Form -->
+                        <form action="/sub/" method="post" class="flex-grow-1 me-2">
+                            {% csrf_token %}
+                            <input type="number" class="form-control" value="0" name="val" placeholder="Qty" min="1" required>
+                            <input type="hidden" value="{{ product.name }}" name="cname">
+                            <button type="submit" class="btn btn-outline-dark mt-2 w-100">Checkout</button>
+                        </form>
 
-                  <!-- Restock Form -->
-                  <form action="/returnitem" method="post" class="d-flex align-items-center">
-                      {% csrf_token %}
-                      <input type="number" class="form-control me-2" value="0" name="val" placeholder="Restock" min="1" required>
-                      <input type="hidden" value="{{ product.name }}" name="cname">
-                      <button type="submit" class="btn btn-outline-success">Restock</button>
-                  </form>
-              </div>
-          </div>
-      </div>
-      {% endfor %}
-  </div>
+                        <!-- Restock Form -->
+                        <form action="/returnitem/" method="post" class="flex-grow-1 ms-2">
+                            {% csrf_token %}
+                            <input type="number" class="form-control" value="0" name="val" placeholder="Restock" min="1" required>
+                            <input type="hidden" value="{{ product.name }}" name="cname">
+                            <button type="submit" class="btn btn-outline-success mt-2 w-100">Restock</button>
+                        </form>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="/products/{{ product.id }}/" class="btn btn-secondary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
 
 
 
@@ -81,7 +88,7 @@ Home
           <div style="background-color: #f8f9fa; border: 1px solid #6c757d; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
               <h2 class="text-center text-dark mb-3">Missing a Tool?</h2>
               <h3 class="text-center text-muted mb-4">Let's add a new one.</h3>
-              <form action="/additem" method="post">
+              <form action="/additem/" method="post">
                   {% csrf_token %}
                   <div class="my-4">
                       <div class="form-group">
@@ -109,7 +116,7 @@ Home
               <h4 class="mb-3 text-dark">Remove an Item</h4>
               <h5 class="text-muted mb-4">Please notify the Manager</h5>
               <div>
-                  <form action="/delete" method="post">
+                  <form action="/delete/" method="post">
                       {% csrf_token %}
                       <select class="form-select mb-3" aria-label=".form-select-lg example" name="cname" style="border: 1px solid #6c757d;">
                           <option selected>Choose Tool</option>

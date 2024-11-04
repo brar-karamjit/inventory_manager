@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Product Detail
+{% endblock title %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="text-center">{{ product.name }}</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Quantity: {{ product.quantity }}</h5>
+            <p class="card-text">current quantity of {{ product.name }} available in store.</p>
+            <a href="/"  class="btn btn-secondary me-2">Back Home</a>
+            <a href="/products/"  class="btn btn-secondary me-2">Inventory</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-5">
+    <h2 class="mb-4">Transactions</h2>
+
+    {% if transactions %}
+        <div class="list-group">
+            {% for transaction in transactions %}
+            <div class="list-group-item border border-dark my-1">
+                <strong>Product:</strong> {{ transaction.product.name }}<br>
+                <strong>Username:</strong> {{ transaction.username }}<br>
+                <strong>Old Quantity:</strong> {{ transaction.old_quantity }}<br>
+                <strong>New Quantity:</strong> {{ transaction.new_quantity }}<br>
+                <strong>Timestamp:</strong> {{ transaction.timestamp }}<br>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">No transactions found.</div>
+    {% endif %}
+</div>
+{% endblock body %}

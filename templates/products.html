@@ -1,45 +1,43 @@
 {% extends 'base.html' %}
 
-{% block title%}
+{% block title %}
 Products
-{% endblock title%}
+{% endblock title %}
 
-{% block body%}
-<div class="container my-3">
-    <h2>List of Products and quantity in store</h2>
-    <table class="table my-5">
-        <thead>
-          <tr>
-            
-            <th scope="col">Name</th>
-            <th scope="col">Quantity</th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          {% for product in Products %}
-          <tr>
-            
-            <td>{{product.name}}</td>
-            <td>{{product.quantity}}</td>
-           
-          </tr>
-          {% endfor %}
-          
-        </tbody>
-        <tbody>
-          
-          <tr>
-            
-            <td>Total quantity in store</td>
-            <td>{{tot}}</td>
-           
-          </tr>
-          
-          
-        </tbody>
-       
-      </table>
+{% block body %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Products Available in Store</h2>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Quantity in Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in Products %}
+                    <tr>
+                        <td class="align-middle">
+                            <a href="/products/{{ product.id }}/" class="text-decoration-none text-dark w-100 d-block">
+                                {{ product.name }}
+                            </a>
+                        </td>
+                        <td class="align-middle text-center">
+                            {{ product.quantity }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>Total Quantity in Store</strong></td>
+                        <td><strong class="text-center">{{ tot }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
-
-{% endblock body%}
+{% endblock body %}
