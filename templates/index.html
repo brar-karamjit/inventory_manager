@@ -118,10 +118,10 @@ Home
               <div>
                   <form action="/delete/" method="post">
                       {% csrf_token %}
-                      <select class="form-select mb-3" aria-label=".form-select-lg example" name="cname" style="border: 1px solid #6c757d;">
+                      <select class="form-select mb-3" aria-label=".form-select-lg example" name="product_id" style="border: 1px solid #6c757d;">
                           <option selected>Choose Tool</option>
                           {% for product in products %}
-                          <option value="{{ product.name }}">{{ product.name }}</option>
+                          <option value="{{ product.id }}">{{ product.name }}</option>
                           {% endfor %}
                       </select>
                       <button class="btn btn-outline-secondary my-3" type="submit" style="width: 100%; transition: background-color 0.3s;">

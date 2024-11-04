@@ -12,7 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .forms import SignUpForm
-
+import barcode
+from barcode.writer import ImageWriter
 
 def signup_view(request):
     if request.method == 'POST':
@@ -40,12 +41,14 @@ def index(request):
     product_list = Product.objects.all()
     return render(request, 'index.html', 
     {'products' : product_list})
-    #return HttpResponse("Welcome to Inventory Tool")
 
 @login_required
 def about(request):
     return render(request, 'about.html')
-    #return HttpResponse("A sample Inventory project")
+
+@login_required
+def barcodescan(request):
+    return render(request, 'barcodescan.html')
 
 @login_required
 def products(request):
@@ -122,6 +125,10 @@ def additem(request):
         c = Product(name=cname, quantity=qt, img=curl)
         c.save()
 
+        barcode_image_path = create_barcode(c.id)
+        c.barcode = barcode_image_path  # Assuming barcode_image_path contains the filename
+        c.save()
+
         # Log the transaction
         transaction = Transaction(
             product=c,
@@ -137,27 +144,23 @@ def additem(request):
 
 @login_required
 def delete(request):
+    # Assuming you are sending product_id in the POST request
+    product_id = request.POST['product_id']
+    product = get_object_or_404(Product, id=product_id)  # Get product by ID
     
-    cname = request.POST['cname']
-    c1 = Product.objects.get(name = cname)
-    val1 = c1.quantity
-    # Log the transaction
-    transaction = Transaction(
-        product=c1,
-        username=request.user.username,  # Automatically use the logged-in user's username
-        old_quantity=c1.quantity,
-        new_quantity=0
-    )
-    transaction.save()
+    val1 = product.quantity  # Store the quantity for display
 
-    c1.delete()
+    product.delete()  # Delete the product
     Product_list = Product.objects.all()
-    tot = 0
-    for Producty in Product_list:
-        tot = tot + Producty.quantity
-    
-    return render(request, 'purchase.html',
-    {'cname1' : cname, 'val': val1, 'tc' :tot})
+    tot = sum(product.quantity for product in Product_list)  # Calculate total quantity
+
+    return render(request, 'purchase.html', {
+        'cname1': product.name,  # Optionally include the name if needed
+        'val': val1,
+        'tc': tot
+    })
+
+
 
 @login_required
 def transaction_list(request):
@@ -180,3 +183,16 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     transactions = Transaction.objects.filter(product=product)  # Fetch related transactions
     return render(request, 'product_detail.html', {'product': product, 'transactions': transactions})
+
+def create_barcode(product_id):
+    # Create a barcode using Code128 format
+    barcode_class = barcode.get('code128')  # Use 'code128' for Code 128 format
+    barcode_instance = barcode_class(str(product_id), writer=ImageWriter())
+
+    # Define the path where you want to save the barcode image
+    barcode_image_path = f'static/barcodes/{product_id}'
+    
+    # Save the barcode image
+    barcode_instance.save(barcode_image_path)
+
+    return barcode_image_path  # Return the path if needed for further use

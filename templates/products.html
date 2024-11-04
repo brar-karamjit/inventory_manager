@@ -41,3 +41,26 @@ Products
     </div>
 </div>
 {% endblock body %}
+
+<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+<script>
+    function startScanner() {
+        const html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            },
+            (decodedText, decodedResult) => {
+                // Redirect to product page using decodedText (barcode)
+                window.location.href = `/products/${decodedText}/`;
+            },
+            (errorMessage) => {
+                // Handle errors here
+            }
+        ).catch(err => {
+            console.error(err);
+        });
+    }
+</script>
