@@ -1,41 +1,58 @@
-# Inventory Manager 
+# Inventory Manager
 
-Tech stack 
-Frontend - HTML, CSS
-Backend - Python
-Framework - Django
-Databse - Sqlite 3
-Hosting - Heroku
+The **Inventory Manager** is a robust Django-based web application designed to help businesses efficiently track and manage their inventory. With an intuitive interface and powerful features, this tool is ideal for businesses of all sizes.
 
-It is a simple inventory manager where employees can update the inventory everytime they borrow/use a tool. You can view the stock of every item. It also
-permits you to remove an item, add a new item and purchase multiple items at a single time.
+## Features
 
-## How to guide -
+- **User Authentication**: Secure login and signup functionality.
+- **Product Management**: Add, update, and delete products with ease.
+- **Barcode Scanning**: Quickly scan barcodes to retrieve product details.
+- **Inventory Tracking**: View available products and their details.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
 
-Access link - https://guarded-plains-11100.herokuapp.com/
-It is deployed on Heroku (Paas) so you can use the app by simply clicking on the above link or copy paste in your
-browser
+## Installation
 
-### Borrowing 
-Once on home page enter the quanity you want to buy, click buy and it will take you to a purchase confirmation page
-and update the quantity in store database.
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/inventory_manager.git
+    cd inventory_manager
+    ```
 
-### Inventory
-In the navbar section you can click "Products" to view the inventory.
+2. Create a virtual environment and activate it:
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
 
-### Add new item
-Scroll down to the section which says "Let's add a new tool to our store." and fill in the form. You can add url of
-the image you want to attribute to item, Name of tool and quantity. Finally click "add to list" and you should be able 
-to see newly added item on home page.
+3. Install the required dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
+4. Apply migrations:
+    ```bash
+    python manage.py migrate
+    ```
 
-### purchase multiple items
-Go to the section which says assorted order. It lets you select 3 items from dropdown menu and the individual quantities.
-It will again take you to order confirmation page and update the inventory.
+5. Run the development server:
+    ```bash
+    python manage.py runserver
+    ```
 
+## Usage
 
-## Future ideas
-1. As you can see right now login is not required, I would want to implement a user signup and login feature. So that one 
-can track history.
-2. Move the deployment from Heroku to AWS.
+- **Homepage**: View available products and their details.
+- **Admin Panel**: Manage products and users (accessible at `/admin`).
+- **Barcode Scanning**: Use the barcode scanning feature to quickly retrieve product details.
 
+## Deployment
+
+To deploy the application, you can use services like Heroku, AWS, or any other cloud provider. Make sure to configure the `Procfile` and `settings.py` for production.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository, create a feature branch, and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details. Inventory Manager
